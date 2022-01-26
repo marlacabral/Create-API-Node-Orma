@@ -18,4 +18,4 @@ const Cadastro = new mongoose.Schema({
     timestamps: true,
 });
 
-mongoose.model("marla", Cadastro);
+mongoose.model("cadastro", Cadastro);

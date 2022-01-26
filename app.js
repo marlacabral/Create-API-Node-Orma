@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const cors = require ('cors');
 
 require("./models/Cadastro");
-const Cadastro = mongoose.model("marla");
+const Cadastro = mongoose.model("cadastro");
 
 const app = express();
 
@@ -11,6 +11,7 @@ app.use(express.json());
 
 app.use((req, res, next) => {
     res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Methods", 'GET,PUT,POST,DELETE');
     app.use(cors());
     next();
 });
@@ -24,7 +25,7 @@ mongoose.connect('mongodb+srv://devmarlacabral:hr88mefXSM2yfSx@competition.3nn1n
     console.log('Erro: Conexão com MongoDB não foi realizada com sucesso!')
 });
 
-app.get('/', (req, res) => {
+app.get('/cadastro', (req, res) => {
    
     Cadastro.find({}).then((cadastro) => {
         return res.json(cadastro)
@@ -37,7 +38,7 @@ app.get('/', (req, res) => {
 });
 
 app.get("/cadastro/:id", (req, res) => {
-    Cadastro.findOne({_id: req.params.id}).then((cadastro) => {
+    Cadastro.findOne({ _id: req.params.id }).then((cadastro) => {
         return res.json(cadastro);
     }).catch((err) => {
         return res.status(400).json({
@@ -53,17 +54,17 @@ app.post('/cadastro', (req, res) => {
         if(err) return res.status(400).json({
             error: true,
             message: "Error: Cadastro não efetuado."
-        })
+        });
 
         return res.status(200).json({
             error: false,
             message: "Cadastro efetuado com sucesso."
         })
-    })
+    });
 });
 
 app.put("/cadastro/:id", (req, res) => {
-    const cadastro = Cadastro.updateOne({ _id: req.params.id}, req.body, (err) =>{
+    const cadastro = Cadastro.updateOne({ _id: req.params.id }, req.body, (err) =>{
         if(err) return res.status(400).json({
             error: true,
             message: "Error: Cadastro não foi editado com sucesso!"
@@ -77,7 +78,7 @@ app.put("/cadastro/:id", (req, res) => {
 });
 
 app.delete("/cadastro/:id", (req, res) => {
-    const cadastro = Cadastro.deleteOne({_id: req.params.id}, (err) => {
+    const cadastro = Cadastro.deleteOne({ _id: req.params.id } , (err) => {
         if(err) return res.status(400).json({
             error: true,
             message: "Error: Cadastro não foi deletado com sucesso."
@@ -86,10 +87,10 @@ app.delete("/cadastro/:id", (req, res) => {
         return res.json({
             error: false,
             message: "Cadastro foi deletado com sucesso!"
-        })
-    })
-})
+        });
+    });
+});
 
 app.listen(8080, () => {
-    console.log("Servidor rodando na porta 8080: http://localhost:8080/");
+    console.log("Servidor rodando na porta: http://localhost:8080/");
 });
